@@ -1,39 +1,59 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Route, Switch, Redirect } from "react-router-dom";
-
-
-import AuthRoutes from "./routes/AuthRoutes";
-import NoAuthRoutes from "./routes/NoAuthRoutes";
+import React, {useState, useEffect} from "react";
+import { Route} from "react-router-dom";
+  
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
+import PrivateRoute from './routes/PrivateRoute';
+import CustomNavbar from './components/CustomNavbar';
 import RegisterPage from "./components/RegisterPage";
 import LoginPage from "./components/LoginPage";
-import CustomNavbar from './components/CustomNavbar';
+import JobsListingPage from './pages/JobsListingPage';
+import EditProfilePage from './components/EditProfilePage'
 
 import "./index.css";
 
-const App = () => {
-  const { token, userId, login, logout } = useAuth();
+const App = (props) => {
+  const {history} = props;
+  const { token, userId, goToLoginPage, login, logout } = useAuth(history);
+  const auth = {
+    isLoggedIn: !!token,
+    token,
+    userId,
+    goToLoginPage,
+    login,
+    logout
+  }
+  const [flag, setFlag] = useState(false)
+
+  useEffect(() => {
+    console.log(!!token)
+    setFlag(!!token)
+  }, [token])
 
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: !!token,
-        token,
-        userId,
-        login,
-        logout,
-      }}
-    >
-      <Router>
-
+    <AuthContext.Provider value={auth}>
+      <CustomNavbar />
+        {console.log(flag)}
+        {console.log(!!token)}
         <div>
-          <CustomNavbar />
+          <Route path='/' exact>
+          <div>Insert home page component here.</div>
+          </Route>
+          <Route path='/signup' exact component={RegisterPage} />
+          <Route path='/login' exact component={LoginPage} />
+          <Route path='/jobs' exact component={JobsListingPage}/>
+          <PrivateRoute path='/profile' component={EditProfilePage}/>
         </div>
-
-        <main>{token ? <AuthRoutes /> : <NoAuthRoutes />}</main>
-      </Router>
+        
+        {/* <PrivateRoute path='/jobs/new' exact>
+          <div>Insert job creation page component here.</div>
+        </PrivateRoute>
+        <PrivateRoute path='/jobs/:jobId' exact>
+          <div>Insert job page component here.</div>
+        </PrivateRoute>
+        <PrivateRoute path='/:userId/jobs' exact>
+          <div>Insert user-created jobs component here.</div>
+        </PrivateRoute> */}
     </AuthContext.Provider>
   );
 };

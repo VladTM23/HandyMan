@@ -2,13 +2,17 @@ import { useState, useCallback, useEffect } from 'react';
 
 let logoutTimer;
 
-export const useAuth = () => {
+export const useAuth = (history) => {
   const [token, setToken] = useState();
   const [userId, setUserId] = useState();
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
-  // Persisting userId and token in the browser's localStorage
+  const goToLoginPage = useCallback(() => {
+    console.log("in go to login")
+    history.push('/login');
+  }, [history]);
 
+  // Persisting userId and token in the browser's localStorage
   const login = useCallback((uid, _token, expirationDate) => {
     // You can pass only the first 2 elements here (when calling it from an Auth-like component)
     setToken(_token);
@@ -25,17 +29,18 @@ export const useAuth = () => {
         expiration: tokenExpirationDate.toISOString()
       })
     );
-  }, []);
+    history.push('/');
+  }, [history]);
 
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
     setTokenExpirationDate(null);
     localStorage.removeItem('userData');
-  }, []);
+    history.push('/');
+  }, [history]);
 
   // Keep the user logged in until his token expires
-
   useEffect(() => {
     if (token && tokenExpirationDate) {
       const remainingTime =
@@ -66,9 +71,11 @@ export const useAuth = () => {
   return {
     userId,
     token,
+    goToLoginPage,
     login,
     logout
   };
+}
 
   /* These will be available in any component (will allow you to check
      ifLoggedIn & privilege related things).
@@ -85,4 +92,3 @@ export const useAuth = () => {
      -> auth.userId === wantedId
      -> auth.login(id, token)
      */
-};

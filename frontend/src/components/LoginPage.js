@@ -5,13 +5,13 @@ import { useHttpClient } from "../shared/hooks/http-hook";
 import { AuthContext } from "../shared/context/auth-context";
 
 function LoginPage() {
+
+  const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
   });
-
-  const auth = useContext(AuthContext);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   function handleChange({ target }) {
     setLoginInfo({

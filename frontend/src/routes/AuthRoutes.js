@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
   Route,
   Redirect,
   Switch
 } from 'react-router-dom';
+
+import EditProfilePage from '../components/EditProfilePage'
 
 const AuthRoutes = () => {
   return (
@@ -12,6 +13,7 @@ const AuthRoutes = () => {
       <Route path='/' exact>
         <div>Insert home page component here.</div>
       </Route>
+      <Route path='/profile' exact component={EditProfilePage}/>
       <Route path='/jobs' exact>
         <div>Insert all jobs page component here.</div>
       </Route>

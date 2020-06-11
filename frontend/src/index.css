@@ -50,6 +50,8 @@
   font-family: "Rubik", sans-serif;
   font-size: 24px;
 
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -89,7 +91,6 @@ body {
 .progress-bar {
   background-color: #e9810a;
 }
-=======
 .progress-bar {
   background-color: #e9810a;
 }

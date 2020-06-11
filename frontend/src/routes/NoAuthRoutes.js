@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
   Route,
   Redirect,
   Switch,
@@ -14,7 +13,7 @@ const NoAuthRoutes = () => {
   return (
     <Switch>
       <Route path="/" exact>
-        <div>Insert home page component here.</div>
+        <div>Insert home page component here NOAuth.</div>
       </Route>
       <Route path="/signup" exact component={RegisterPage} />
       <Route path="/login" exact component={LoginPage} />
